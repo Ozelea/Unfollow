@@ -31,16 +31,24 @@ def unfollow():
         idsStrings = f.read().split('\n')
         del idsStrings[-1]                               #delete last empty string generated
         ids = list(map(int, idsStrings))
-        for i in updated_followers:
-            if i not in ids:
-                api.destroy_friendship(i)
-
-
+        for i in ids:
+            if i not in updated_followers:
+                
+                
+                try:
+                    user = api.get_user(i)
+                    screen_name = user.screen_name
+                    print("@" + screen_name)
+                except Exception:
+                    print("User Not Found")
 while True:
     unfollow()
     time.sleep(10)
     store_followers(file_name)
     time.sleep(600)
+
+    
+
     
 
     
