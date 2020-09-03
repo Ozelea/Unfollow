@@ -5,14 +5,12 @@ consumer_secret = "XXXXXXXXXXXXXXXXXXXXXX"
 access_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 access_secret = "XXXXXXXXXXXXXXXXXXXXXXXXXX"
 
-username = "Enter Your User Name"
-print("Script is Running.....")
-
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_key, access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
-
+username =  #Enter You user name here
+print("Script is Running.....")
 
 file_name = "followers.txt"
 def store_followers(file_name):
@@ -21,35 +19,39 @@ def store_followers(file_name):
     for id in followers:
         file_write.write(str(id)+'\n')
     file_write.close()
-    
+
+
+file_name1 = "unfollower.txt"
+def unfollowers(file_name1, unfollower):
+    file_write1 = open(file_name1, "a")
+    file_write1.write('https://twitter.com/' + str(unfollower) + '\n')
+    file_write1.close	
+
 
 
 
 def unfollow():
-    updated_followers = api.followers_ids("Abubakr160", [-1])
+    updated_followers = api.followers_ids(username, [-1])
     
     with open(file_name, "r") as f:
         idsStrings = f.read().split('\n')
-        del idsStrings[-1]                               #delete last empty string generated
+        del idsStrings[-1]                               
         ids = list(map(int, idsStrings))
         for i in ids:
             if i not in updated_followers:
-                
+
+
                 
                 try:
                     user = api.get_user(i)
                     screen_name = user.screen_name
                     print("@" + screen_name)
+                    unfollowers(file_name1, screen_name)
+                  
                 except Exception:
-                    print("User Not Found")
-while True:
-    unfollow()
-    time.sleep(10)
-    store_followers(file_name)
-    time.sleep(600)
+                    error_msg = "User Not Found"
+                    unfollowers(file_name1, error_msg)
 
-    
-
-    
-
-    
+unfollow()    
+time.sleep(2)
+store_followers(file_name)
